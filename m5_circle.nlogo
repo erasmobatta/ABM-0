@@ -3,11 +3,9 @@ globals[
 
   initial-population
   energy-zero
-  mean-population
-  last-mean
-  current-population ;;parameters about length of population
-  low-fraction
   vision
+
+  low-fraction
   av-lifetime
 ]
 breed [persons person]
@@ -17,9 +15,6 @@ persons-own [
   consume
   age
   ]
-patches-own[
-  recovery-time
-]
 
 sources-own[
   source-energy
@@ -47,7 +42,6 @@ to setup
     set age 0
   ]
   ask patches [
-    set recovery-time 0
     set pcolor white
      sprout-sources 1 [
             set color green
@@ -55,42 +49,23 @@ to setup
             ]
     ]
 
-  set last-mean initial-population
   reset-ticks
 end
 
 to go
   if not any? persons [ stop ]
-  ;if ticks mod time-scale-grow-sources = 0 [ grow-sources]
-  grow-sources
   ask persons
-  [ move
+  [
+    metabolism
     eat
-    reproduce
     aging
     death ]
   set-globals
   tick
 end
 
-to grow-sources
-  ask patches with [not any? sources-here]  [
-    set recovery-time recovery-time + 1
-    if recovery-time >= time-scale-grow-sources
-       [sprout-sources 1 [
-            set color green
-            set source-energy init-source-energy
-
-        ]]
-
-    ]
-
-end
-to move  ;; person procedure
-  right random 360
-  forward consume
-  set energy energy - consume - basal-met
-
+to metabolism
+  set energy energy - basal-met
 end
 
 to eat
@@ -98,7 +73,6 @@ to eat
       let increment 0
       ask sources in-radius (vision + consume) [
         set increment increment + source-energy
-        ask patch-here [set recovery-time 0]
         die
         ]
       set energy energy + increment
@@ -106,13 +80,6 @@ to eat
 
 end
 
-to reproduce     ;; person procedure
-  ;; give birth to a new person, but it takes lots of energy
-  if energy > energy-zero * 2
-    [ set energy energy / 2
-      hatch 1 [set age 0]
-      ]
-end
 
 to aging
   set age age + 1
@@ -121,19 +88,11 @@ end
 to death     ;; person procedure
   ;; die if you run out of energy
   if energy < 0 [ die ]
-  ;; or if your metabolism is less than 1 (arbitrary threshold)
-  if consume < 1 [ die ]
+
 end
 
 to set-globals ;; observer procedure
-  if ticks = 99 [set last-mean count persons]
-  if ticks > 99 [
-    set current-population count persons
-    set mean-population (last-mean * ticks + current-population)/(ticks + 1)
-    set last-mean mean-population
 
-
-  ]
   set av-lifetime mean [age] of persons
   set low-fraction count persons with [consume = 1.5]/ count persons
 end
@@ -294,7 +253,7 @@ time-scale-grow-sources
 time-scale-grow-sources
 1
 10
-4
+1
 1
 1
 NIL
