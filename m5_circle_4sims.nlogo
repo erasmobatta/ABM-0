@@ -3,15 +3,10 @@ globals[
 
   initial-population
   energy-zero
-  mean-population
-  last-mean
-  current-population ;;parameters about length of population
-  low-fraction
   vision
-  av-lifetime
 
-  basal-met
-  base-area
+  low-fraction
+  av-lifetime
 ]
 breed [persons person]
 breed [sources source]
@@ -31,8 +26,6 @@ to setup
   set-default-shape sources "plant"
   set initial-population 300
   set energy-zero 10
-  set basal-met 1 + random-float 3
-  set base-area 4 + random-float 8
   set vision sqrt(base-area / pi)
   create-persons (initial-population / 2) [
     set consume 1.5
@@ -56,40 +49,23 @@ to setup
             ]
     ]
 
-  set last-mean initial-population
   reset-ticks
 end
 
 to go
   if not any? persons [ stop ]
-  grow-sources
   ask persons
-  [ move
+  [
+    metabolism
     eat
-    reproduce
     aging
     death ]
   set-globals
   tick
 end
 
-to grow-sources
-  ask patches with [not any? sources-here]  [
-
-       sprout-sources 1 [
-            set color green
-            set source-energy init-source-energy
-
-        ]
-
-    ]
-
-end
-to move  ;; person procedure
-  right random 360
-  forward consume
-  set energy energy - consume - basal-met
-
+to metabolism
+  set energy energy - basal-met
 end
 
 to eat
@@ -104,13 +80,6 @@ to eat
 
 end
 
-to reproduce     ;; person procedure
-  ;; give birth to a new person, but it takes lots of energy
-  if energy > energy-zero * 2
-    [ set energy energy / 2
-      hatch 1 [set age 0]
-      ]
-end
 
 to aging
   set age age + 1
@@ -119,19 +88,11 @@ end
 to death     ;; person procedure
   ;; die if you run out of energy
   if energy < 0 [ die ]
-  ;; or if your metabolism is less than 1 (arbitrary threshold)
-  if consume < 1 [ die ]
+
 end
 
 to set-globals ;; observer procedure
-  if ticks = 99 [set last-mean count persons]
-  if ticks > 99 [
-    set current-population count persons
-    set mean-population (last-mean * ticks + current-population)/(ticks + 1)
-    set last-mean mean-population
 
-
-  ]
   set av-lifetime mean [age] of persons
   set low-fraction count persons with [consume = 1.5]/ count persons
 end
@@ -203,10 +164,10 @@ NIL
 0
 
 PLOT
-13
-175
-213
-325
+14
+229
+214
+379
 low fraction
 NIL
 NIL
@@ -220,11 +181,41 @@ false
 PENS
 "fast" 1.0 0 -2674135 true "" "plot low-fraction"
 
+SLIDER
+34
+56
+206
+89
+basal-met
+basal-met
+1
+10
+1
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+35
+90
+207
+123
+base-area
+base-area
+1
+15
+1
+1
+1
+NIL
+HORIZONTAL
+
 PLOT
-11
-330
-211
-480
+12
+384
+212
+534
 average lifetime
 NIL
 NIL
@@ -239,16 +230,31 @@ PENS
 "default" 1.0 0 -16777216 true "" "plot av-lifetime"
 
 SLIDER
-9
-119
-181
-152
+36
+124
+208
+157
 init-source-energy
 init-source-energy
 0
 1
-0.15
+1
 0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+28
+159
+213
+192
+time-scale-grow-sources
+time-scale-grow-sources
+1
+10
+1
+1
 1
 NIL
 HORIZONTAL
@@ -641,31 +647,6 @@ NetLogo 5.3.1
     <metric>low-fraction</metric>
     <steppedValueSet variable="basal-met" first="1" step="0.5" last="3"/>
     <steppedValueSet variable="base-area" first="4" step="1" last="13"/>
-  </experiment>
-  <experiment name="bMet-bArea-circle2" repetitions="3000" runMetricsEveryStep="false">
-    <setup>setup</setup>
-    <go>go</go>
-    <timeLimit steps="1000"/>
-    <metric>count persons</metric>
-    <metric>basal-met</metric>
-    <metric>base-area</metric>
-    <metric>mean-population</metric>
-    <metric>av-lifetime</metric>
-    <metric>low-fraction</metric>
-  </experiment>
-  <experiment name="bMet-bArea-iSE015" repetitions="3000" runMetricsEveryStep="false">
-    <setup>setup</setup>
-    <go>go</go>
-    <timeLimit steps="1000"/>
-    <metric>count persons</metric>
-    <metric>basal-met</metric>
-    <metric>base-area</metric>
-    <metric>mean-population</metric>
-    <metric>av-lifetime</metric>
-    <metric>low-fraction</metric>
-    <enumeratedValueSet variable="init-source-energy">
-      <value value="0.15"/>
-    </enumeratedValueSet>
   </experiment>
 </experiments>
 @#$#@#$#@
