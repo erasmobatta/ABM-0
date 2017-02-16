@@ -3,6 +3,8 @@ globals[
 
   initial-population
   energy-zero
+  basal-met
+  base-area
   vision
 
   low-fraction
@@ -26,6 +28,8 @@ to setup
   set-default-shape sources "plant"
   set initial-population 300
   set energy-zero 10
+  set basal-met 1 +  random-float 3
+  set base-area 4 + random-float 8
   set vision sqrt(base-area / pi)
   create-persons (initial-population / 2) [
     set consume 1.5
@@ -180,36 +184,6 @@ false
 "" ""
 PENS
 "fast" 1.0 0 -2674135 true "" "plot low-fraction"
-
-SLIDER
-34
-56
-206
-89
-basal-met
-basal-met
-1
-10
-1
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-35
-90
-207
-123
-base-area
-base-area
-1
-15
-1
-1
-1
-NIL
-HORIZONTAL
 
 PLOT
 12
@@ -647,6 +621,20 @@ NetLogo 5.3.1
     <metric>low-fraction</metric>
     <steppedValueSet variable="basal-met" first="1" step="0.5" last="3"/>
     <steppedValueSet variable="base-area" first="4" step="1" last="13"/>
+  </experiment>
+  <experiment name="no-move-no-reproduction" repetitions="3000" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="1000"/>
+    <metric>count persons</metric>
+    <metric>low-fraction</metric>
+    <metric>av-lifetime</metric>
+    <enumeratedValueSet variable="time-scale-grow-sources">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="init-source-energy">
+      <value value="1"/>
+    </enumeratedValueSet>
   </experiment>
 </experiments>
 @#$#@#$#@
