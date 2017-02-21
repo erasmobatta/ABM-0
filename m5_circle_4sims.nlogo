@@ -28,8 +28,8 @@ to setup
   set-default-shape sources "plant"
   set initial-population 300
   set energy-zero 10
-  set basal-met 1 +  random-float 3
-  set base-area 4 + random-float 8
+  set basal-met random-float 4
+  set base-area random-float 12
   set vision sqrt(base-area / pi)
   create-persons (initial-population / 2) [
     set consume 1.5
@@ -629,6 +629,8 @@ NetLogo 5.3.1
     <metric>count persons</metric>
     <metric>low-fraction</metric>
     <metric>av-lifetime</metric>
+    <metric>basal-met</metric>
+    <metric>base-area</metric>
     <enumeratedValueSet variable="time-scale-grow-sources">
       <value value="1"/>
     </enumeratedValueSet>
