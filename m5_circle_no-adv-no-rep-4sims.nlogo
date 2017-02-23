@@ -247,7 +247,7 @@ SWITCH
 229
 cost-move
 cost-move
-0
+1
 1
 -1000
 
@@ -639,6 +639,25 @@ NetLogo 5.3.1
     <metric>low-fraction</metric>
     <steppedValueSet variable="basal-met" first="1" step="0.5" last="3"/>
     <steppedValueSet variable="base-area" first="4" step="1" last="13"/>
+  </experiment>
+  <experiment name="BA-BM-NOcostMove" repetitions="3000" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="1000"/>
+    <metric>count persons</metric>
+    <metric>low-fraction</metric>
+    <metric>av-lifetime</metric>
+    <metric>base-area</metric>
+    <metric>basal-met</metric>
+    <enumeratedValueSet variable="init-source-energy">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cost-move">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="time-scale-grow-sources">
+      <value value="1"/>
+    </enumeratedValueSet>
   </experiment>
 </experiments>
 @#$#@#$#@
