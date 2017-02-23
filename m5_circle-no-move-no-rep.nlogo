@@ -43,11 +43,9 @@ to setup
   ]
   ask patches [
     set pcolor white
-     sprout-sources 1 [
-            set color green
-            set source-energy init-source-energy
-            ]
-    ]
+    grow-sources
+  ]
+
 
   reset-ticks
 end
@@ -61,7 +59,19 @@ to go
     aging
     death ]
   set-globals
+  if ticks < gen-sources [
+    ask patches with [not any? sources-here] [grow-sources]
+    ]
   tick
+end
+
+to grow-sources
+
+    sprout-sources 1 [
+            set color green
+            set source-energy init-source-energy
+            ]
+
 end
 
 to metabolism
@@ -216,7 +226,7 @@ PLOT
 384
 212
 534
-average lifetime
+population
 NIL
 NIL
 0.0
@@ -227,7 +237,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot av-lifetime"
+"default" 1.0 0 -16777216 true "" "plot count persons"
 
 SLIDER
 36
@@ -254,6 +264,21 @@ time-scale-grow-sources
 1
 10
 1
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+35
+193
+207
+226
+gen-sources
+gen-sources
+0
+100
+6
 1
 1
 NIL

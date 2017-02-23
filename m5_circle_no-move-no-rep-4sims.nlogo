@@ -47,10 +47,7 @@ to setup
   ]
   ask patches [
     set pcolor white
-     sprout-sources 1 [
-            set color green
-            set source-energy init-source-energy
-            ]
+    grow-sources
     ]
 
   reset-ticks
@@ -65,11 +62,23 @@ to go
     aging
     death ]
   set-globals
+   if ticks < gen-sources [
+    ask patches with [not any? sources-here] [grow-sources]
+    ]
   tick
 end
 
 to metabolism
   set energy energy - basal-met
+end
+
+to grow-sources
+
+    sprout-sources 1 [
+            set color green
+            set source-energy init-source-energy
+            ]
+
 end
 
 to eat
@@ -190,7 +199,7 @@ PLOT
 384
 212
 534
-average lifetime
+population
 NIL
 NIL
 0.0
@@ -201,7 +210,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot av-lifetime"
+"default" 1.0 0 -16777216 true "" "plot count persons"
 
 SLIDER
 36
@@ -228,6 +237,21 @@ time-scale-grow-sources
 1
 10
 1
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+35
+195
+207
+228
+gen-sources
+gen-sources
+0
+100
+10
 1
 1
 NIL
@@ -636,6 +660,10 @@ NetLogo 5.3.1
     </enumeratedValueSet>
     <enumeratedValueSet variable="init-source-energy">
       <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="gen-sources">
+      <value value="1"/>
+      <value value="10"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>
