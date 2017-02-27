@@ -70,6 +70,7 @@ end
 
 to metabolism
   set energy energy - basal-met
+  if consume = 2.0 [set energy energy - cost-perception]
 end
 
 to grow-sources
@@ -251,8 +252,23 @@ gen-sources
 gen-sources
 0
 100
-10
+0
 1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+36
+88
+208
+121
+cost-perception
+cost-perception
+0
+1
+0.5
+0.1
 1
 NIL
 HORIZONTAL
@@ -662,8 +678,11 @@ NetLogo 5.3.1
       <value value="1"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="gen-sources">
-      <value value="1"/>
-      <value value="10"/>
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="cost-perception">
+      <value value="0.1"/>
+      <value value="0.5"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>

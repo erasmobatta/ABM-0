@@ -76,6 +76,7 @@ end
 
 to metabolism
   set energy energy - basal-met
+  if consume = 2.0 [set energy energy - cost-perception]
 end
 
 to eat
@@ -174,10 +175,10 @@ NIL
 0
 
 PLOT
-14
-229
-214
-379
+11
+269
+211
+419
 low fraction
 NIL
 NIL
@@ -222,10 +223,10 @@ NIL
 HORIZONTAL
 
 PLOT
-12
-384
-212
-534
+9
+424
+209
+574
 population
 NIL
 NIL
@@ -270,16 +271,31 @@ NIL
 HORIZONTAL
 
 SLIDER
-35
-193
-207
-226
+39
+231
+211
+264
 gen-sources
 gen-sources
 0
 100
-6
+0
 1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+36
+195
+208
+228
+cost-perception
+cost-perception
+0
+1
+0
+0.1
 1
 NIL
 HORIZONTAL
